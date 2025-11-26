@@ -1,0 +1,23 @@
+# Compiled Java files
+*.class
+src/com/carrental/*.class
+
+# Database files
+*.db
+rental_data.txt
+
+# Library files
+lib/
+*.jar
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Sensitive files
+config.properties

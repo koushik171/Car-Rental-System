@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+    <div class="container">
+        <header>
+            <h1>Car Rental System</h1>
+            <p>Your trusted partner for car rentals</p>
+        </header>
+
+        <main>
+            <!-- Rental Form Section -->
+            <section class="rental-form-section">
+                <div class="card">
+                    <h2>Rent a Car</h2>
+                    <form class="rental-form">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name:</label>
+                            <input type="text" id="customerName" name="customerName" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="carModel">Car Model:</label>
+                            <select id="carModel" name="carModel" required>
+                                <option value="">Select a car</option>
+                                <option value="toyota-camry">Toyota Camry - $45/day</option>
+                                <option value="honda-civic">Honda Civic - $40/day</option>
+                                <option value="bmw-x3">BMW X3 - $80/day</option>
+                                <option value="mercedes-c-class">Mercedes C-Class - $90/day</option>
+                                <option value="ford-focus">Ford Focus - $35/day</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customerPhone">Phone Number:</label>
+                            <input type="tel" id="customerPhone" name="customerPhone" placeholder="Enter phone number" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rentalDays">Number of Days:</label>
+                            <input type="number" id="rentalDays" name="rentalDays" min="1" placeholder="Enter rental days" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="totalCost">Total Cost:</label>
+                            <input type="text" id="totalCost" name="totalCost" readonly placeholder="$0.00">
+                        </div>
+                        
+                        <button type="submit" class="rent-btn">Rent Car</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Car Fleet Section -->
+            <section class="car-fleet-section">
+                <div class="card">
+                    <h2>Available Cars</h2>
+                    <div class="table-container">
+                        <table class="car-table">
+                            <thead>
+                                <tr>
+                                    <th>Car ID</th>
+                                    <th>Year</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Color</th>
+                                    <th>Fuel</th>
+                                    <th>Price/Day</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2023</td>
+                                    <td>Toyota</td>
+                                    <td>Camry</td>
+                                    <td>White</td>
+                                    <td>Petrol</td>
+                                    <td data-price="45">$45.00</td>
+                                    <td><span class="status available">Available</span></td>
+                                    <td><button class="action-btn rent" onclick="selectCar(1, 'Toyota Camry', 45)">Rent</button></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2022</td>
+                                    <td>Honda</td>
+                                    <td>Civic</td>
+                                    <td>Blue</td>
+                                    <td>Petrol</td>
+                                    <td data-price="40">$40.00</td>
+                                    <td><span class="status rented">Rented</span></td>
+                                    <td><button class="action-btn return">Return</button></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>2024</td>
+                                    <td>BMW</td>
+                                    <td>X3</td>
+                                    <td>Black</td>
+                                    <td>Diesel</td>
+                                    <td data-price="80">$80.00</td>
+                                    <td><span class="status available">Available</span></td>
+                                    <td><button class="action-btn rent" onclick="selectCar(3, 'BMW X3', 80)">Rent</button></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>2023</td>
+                                    <td>Mercedes</td>
+                                    <td>C-Class</td>
+                                    <td>Silver</td>
+                                    <td>Petrol</td>
+                                    <td data-price="90">$90.00</td>
+                                    <td><span class="status available">Available</span></td>
+                                    <td><button class="action-btn rent" onclick="selectCar(4, 'Mercedes C-Class', 90)">Rent</button></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>2021</td>
+                                    <td>Ford</td>
+                                    <td>Focus</td>
+                                    <td>Red</td>
+                                    <td>Petrol</td>
+                                    <td data-price="35">$35.00</td>
+                                    <td><span class="status available">Available</span></td>
+                                    <td><button class="action-btn rent" onclick="selectCar(5, 'Ford Focus', 35)">Rent</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Car Rental System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
