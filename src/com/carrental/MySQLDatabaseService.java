@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class MySQLDatabaseService {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/car_rental";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = ""; // Change this to your MySQL password
+    private static final String PASSWORD = "Koushik@004"; // MySQL password
     
     // Initialize MySQL database
     public static void initializeDatabase() {

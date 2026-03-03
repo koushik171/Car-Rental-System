@@ -8,12 +8,16 @@ public class Customer {
     private String name;
     private String phone;
     private String email;
+    private LoyaltyPoints loyaltyPoints;
+    private int referralCount;
 
     public Customer(int customerId, String name, String phone, String email) {
         this.customerId = customerId;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.loyaltyPoints = new LoyaltyPoints(customerId);
+        this.referralCount = 0;
     }
 
     // Getters and Setters
@@ -28,10 +32,20 @@ public class Customer {
     
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    
+    public LoyaltyPoints getLoyaltyPoints() { return loyaltyPoints; }
+    public void setLoyaltyPoints(LoyaltyPoints points) { this.loyaltyPoints = points; }
+    
+    public int getReferralCount() { return referralCount; }
+    public void addReferral() { 
+        referralCount++;
+        loyaltyPoints.addPoints(50); // 50 points per referral
+    }
 
     @Override
     public String toString() {
-        return String.format("ID: %d | Name: %s | Phone: %s | Email: %s", 
-                           customerId, name, phone, email);
+        return String.format("ID: %d | Name: %s | Phone: %s | Email: %s | Tier: %s | Points: %d", 
+                           customerId, name, phone, email, 
+                           loyaltyPoints.getTier(), loyaltyPoints.getPoints());
     }
 }

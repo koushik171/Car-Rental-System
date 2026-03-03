@@ -11,9 +11,13 @@ public class Rental {
     private int carId;
     private LocalDate rentalDate;
     private LocalDate returnDate;
+    private LocalDate actualReturnDate;
     private int days;
     private double totalCost;
     private boolean isActive;
+    private Insurance insurance;
+    private double lateFee;
+    private int estimatedMileage;
 
     public Rental(int rentalId, int customerId, int carId, int days, double totalCost) {
         this.rentalId = rentalId;
@@ -24,6 +28,9 @@ public class Rental {
         this.rentalDate = LocalDate.now();
         this.returnDate = rentalDate.plusDays(days);
         this.isActive = true;
+        this.insurance = new Insurance(rentalId, Insurance.Type.NONE);
+        this.lateFee = 0;
+        this.estimatedMileage = days * 100; // Estimate 100km per day
     }
 
     // Getters and Setters
@@ -50,10 +57,33 @@ public class Rental {
     
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
+    
+    public Insurance getInsurance() { return insurance; }
+    public void setInsurance(Insurance insurance) { this.insurance = insurance; }
+    
+    public double getLateFee() { return lateFee; }
+    public void setLateFee(double lateFee) { this.lateFee = lateFee; }
+    
+    public LocalDate getActualReturnDate() { return actualReturnDate; }
+    public void setActualReturnDate(LocalDate date) { this.actualReturnDate = date; }
+    
+    public int getEstimatedMileage() { return estimatedMileage; }
+    public void setEstimatedMileage(int mileage) { this.estimatedMileage = mileage; }
+    
+    // Calculate late fee: $50/day
+    public double calculateLateFee() {
+        if (actualReturnDate == null || !actualReturnDate.isAfter(returnDate)) {
+            return 0;
+        }
+        long daysLate = java.time.temporal.ChronoUnit.DAYS.between(returnDate, actualReturnDate);
+        lateFee = daysLate * 50;
+        return lateFee;
+    }
 
     @Override
     public String toString() {
-        return String.format("Rental ID: %d | Customer: %d | Car: %d | Days: %d | Cost: $%.2f | Date: %s", 
-                           rentalId, customerId, carId, days, totalCost, rentalDate);
+        String lateInfo = lateFee > 0 ? String.format(" | Late Fee: $%.2f", lateFee) : "";
+        return String.format("Rental ID: %d | Customer: %d | Car: %d | Days: %d | Cost: $%.2f | Date: %s%s", 
+                           rentalId, customerId, carId, days, totalCost, rentalDate, lateInfo);
     }
 }

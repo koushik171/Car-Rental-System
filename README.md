@@ -1,6 +1,26 @@
 # Car Rental System
 
-A comprehensive car rental management system built with Core Java and enhanced web interface.
+A comprehensive, production-ready car rental management system with advanced features including dynamic pricing, loyalty rewards, predictive maintenance, and role-based access control.
+
+## 🌟 Unique Features
+
+### Business Intelligence
+- **Dynamic Pricing Engine**: Multi-factor pricing (demand, season, weekend, holidays)
+- **Loyalty Points System**: 4-tier rewards (Bronze/Silver/Gold/Platinum)
+- **Promo Codes**: Discount management with expiry and usage limits
+- **Early Bird Discounts**: 10% off for advance bookings
+
+### Operational Excellence
+- **Predictive Maintenance**: Automatic service scheduling based on mileage
+- **Late Return Penalties**: Automated $50/day late fees
+- **Insurance Options**: 4 tiers (None/Basic/Premium/Full)
+- **Damage Assessment**: Coverage-based liability calculation
+
+### Customer Engagement
+- **Review & Rating System**: 5-star ratings with comments
+- **Referral Rewards**: 50 points per referral
+- **Self-Registration**: Customer signup at login
+- **Role-Based Access**: Separate menus for customers and managers
 
 ## Features
 

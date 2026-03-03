@@ -12,6 +12,9 @@ public class Car {
     private String fuelType;
     private double pricePerDay;
     private boolean available;
+    private Maintenance maintenance;
+    private double averageRating;
+    private int totalReviews;
 
     // Constructor
     public Car(int carId, String brand, String model, int year, String color, String fuelType, double pricePerDay) {
@@ -23,6 +26,9 @@ public class Car {
         this.fuelType = fuelType;
         this.pricePerDay = pricePerDay;
         this.available = true;
+        this.maintenance = new Maintenance(carId);
+        this.averageRating = 0.0;
+        this.totalReviews = 0;
     }
 
     // Getters
@@ -90,12 +96,25 @@ public class Car {
     public void setAvailable(boolean available) {
         this.available = available;
     }
+    
+    public Maintenance getMaintenance() { return maintenance; }
+    public void setMaintenance(Maintenance maintenance) { this.maintenance = maintenance; }
+    
+    public double getAverageRating() { return averageRating; }
+    public int getTotalReviews() { return totalReviews; }
+    
+    public void addReview(int rating) {
+        averageRating = (averageRating * totalReviews + rating) / (totalReviews + 1);
+        totalReviews++;
+    }
 
     // toString method for easy display
     @Override
     public String toString() {
         String status = available ? "Available" : "Rented";
-        return String.format("ID: %d | %d %s %s | %s | %s | $%.2f/day | %s", 
-                           carId, year, brand, model, color, fuelType, pricePerDay, status);
+        if (maintenance.needsService()) status = "Maintenance";
+        String rating = totalReviews > 0 ? String.format(" | ⭐%.1f (%d)", averageRating, totalReviews) : "";
+        return String.format("ID: %d | %d %s %s | %s | %s | $%.2f/day | %s%s", 
+                           carId, year, brand, model, color, fuelType, pricePerDay, status, rating);
     }
 }

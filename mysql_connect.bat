@@ -1,0 +1,3 @@
+@echo off
+echo Connecting to MySQL...
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -pKoushik@004 car_rental
