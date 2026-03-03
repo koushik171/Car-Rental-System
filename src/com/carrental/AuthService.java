@@ -50,6 +50,24 @@ public class AuthService {
                     "role ENUM('CUSTOMER', 'MANAGER') NOT NULL, " +
                     "customer_id VARCHAR(20))";
         conn.createStatement().execute(sql);
+        
+        // Create loyalty_points table
+        String loyaltySql = "CREATE TABLE IF NOT EXISTS loyalty_points (" +
+                           "customer_id INT PRIMARY KEY, " +
+                           "points INT DEFAULT 0, " +
+                           "tier VARCHAR(20) DEFAULT 'BRONZE', " +
+                           "referral_count INT DEFAULT 0)";
+        conn.createStatement().execute(loyaltySql);
+        
+        // Create promo_codes table
+        String promoSql = "CREATE TABLE IF NOT EXISTS promo_codes (" +
+                         "code VARCHAR(50) PRIMARY KEY, " +
+                         "discount_percent DOUBLE, " +
+                         "expiry_date DATE, " +
+                         "usage_limit INT, " +
+                         "times_used INT DEFAULT 0, " +
+                         "is_active BOOLEAN DEFAULT TRUE)";
+        conn.createStatement().execute(promoSql);
     }
     
     // Login authentication

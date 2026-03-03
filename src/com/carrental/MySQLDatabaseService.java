@@ -186,6 +186,104 @@ public class MySQLDatabaseService {
         }
     }
     
+    // Save loyalty points to database
+    public static void saveLoyaltyPoints(int customerId, LoyaltyPoints loyaltyPoints) {
+        String sql = "INSERT INTO loyalty_points (customer_id, points, tier, referral_count) " +
+                    "VALUES (?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE points=?, tier=?, referral_count=?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, customerId);
+            pstmt.setInt(2, loyaltyPoints.getPoints());
+            pstmt.setString(3, loyaltyPoints.getTier());
+            pstmt.setInt(4, 0); // referral_count placeholder
+            pstmt.setInt(5, loyaltyPoints.getPoints());
+            pstmt.setString(6, loyaltyPoints.getTier());
+            pstmt.setInt(7, 0);
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error saving loyalty points: " + e.getMessage());
+        }
+    }
+    
+    // Load loyalty points from database
+    public static LoyaltyPoints loadLoyaltyPoints(int customerId) {
+        String sql = "SELECT points, tier FROM loyalty_points WHERE customer_id = ?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, customerId);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                LoyaltyPoints lp = new LoyaltyPoints(customerId);
+                lp.setPoints(rs.getInt("points"));
+                return lp;
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Error loading loyalty points: " + e.getMessage());
+        }
+        
+        return new LoyaltyPoints(customerId);
+    }
+    
+    // Save promo code to database
+    public static void savePromoCode(PromoCode promo) {
+        String sql = "INSERT INTO promo_codes (code, discount_percent, expiry_date, usage_limit, times_used, is_active) " +
+                    "VALUES (?, ?, ?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE times_used=?, is_active=?";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, promo.getCode());
+            pstmt.setDouble(2, promo.getDiscountPercent());
+            pstmt.setDate(3, Date.valueOf(promo.getExpiryDate()));
+            pstmt.setInt(4, promo.getUsageLimit());
+            pstmt.setInt(5, promo.getTimesUsed());
+            pstmt.setBoolean(6, promo.isActive());
+            pstmt.setInt(7, promo.getTimesUsed());
+            pstmt.setBoolean(8, promo.isActive());
+            pstmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error saving promo code: " + e.getMessage());
+        }
+    }
+    
+    // Load all promo codes from database
+    public static ArrayList<PromoCode> loadPromoCodes() {
+        ArrayList<PromoCode> promoCodes = new ArrayList<>();
+        String sql = "SELECT * FROM promo_codes";
+        
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                PromoCode promo = new PromoCode(
+                    rs.getString("code"),
+                    rs.getDouble("discount_percent"),
+                    rs.getDate("expiry_date").toLocalDate(),
+                    rs.getInt("usage_limit")
+                );
+                promo.setActive(rs.getBoolean("is_active"));
+                promo.setTimesUsed(rs.getInt("times_used"));
+                promoCodes.add(promo);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Note: Using default promo codes");
+        }
+        
+        return promoCodes;
+    }
+    
     // Test connection method
     public static void main(String[] args) {
         System.out.println("Testing MySQL connection...");

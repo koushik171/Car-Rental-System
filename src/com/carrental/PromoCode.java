@@ -40,5 +40,6 @@ public class PromoCode {
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { this.isActive = active; }
     public int getTimesUsed() { return timesUsed; }
+    public void setTimesUsed(int timesUsed) { this.timesUsed = timesUsed; }
     public int getUsageLimit() { return usageLimit; }
 }

@@ -43,9 +43,22 @@ public class CarService {
     
     // Initialize default promo codes
     private void initializePromoCodes() {
+        // Try to load from database first
+        ArrayList<PromoCode> dbPromoCodes = MySQLDatabaseService.loadPromoCodes();
+        if (!dbPromoCodes.isEmpty()) {
+            promoCodes = dbPromoCodes;
+            return;
+        }
+        
+        // If no promo codes in DB, create defaults and save them
         promoCodes.add(new PromoCode("WELCOME10", 10, java.time.LocalDate.now().plusMonths(3), 100));
         promoCodes.add(new PromoCode("SUMMER25", 25, java.time.LocalDate.now().plusMonths(2), 50));
         promoCodes.add(new PromoCode("FIRST20", 20, java.time.LocalDate.now().plusYears(1), 1000));
+        
+        // Save to database
+        for (PromoCode promo : promoCodes) {
+            MySQLDatabaseService.savePromoCode(promo);
+        }
     }
 
     // Add a new car to the fleet
@@ -133,6 +146,7 @@ public class CarService {
             PromoCode promo = findPromoCode(promoCode);
             if (promo != null && promo.isValid()) {
                 totalCost = promo.applyDiscount(totalCost);
+                MySQLDatabaseService.savePromoCode(promo); // Save updated usage
                 System.out.println("Promo code applied: " + promo.getDiscountPercent() + "% off!");
             }
         }
@@ -157,6 +171,7 @@ public class CarService {
         
         // Award loyalty points
         customer.getLoyaltyPoints().addPoints(totalCost);
+        MySQLDatabaseService.saveLoyaltyPoints(customerId, customer.getLoyaltyPoints());
         
         // Save to database
         MySQLDatabaseService.saveRental(rental, customer, carToRent);
@@ -297,10 +312,16 @@ public class CarService {
     // Add customer and return ID (for registration)
     public int addCustomerWithId(String name, String phone, String email) {
         Customer customer = new Customer(nextCustomerId++, name, phone, email);
+        
+        // Load loyalty points from database if exists
+        LoyaltyPoints lp = MySQLDatabaseService.loadLoyaltyPoints(customer.getCustomerId());
+        customer.setLoyaltyPoints(lp);
+        
         customerList.add(customer);
         
         // Save to database
         MySQLDatabaseService.saveCustomer(customer);
+        MySQLDatabaseService.saveLoyaltyPoints(customer.getCustomerId(), customer.getLoyaltyPoints());
         
         saveData();
         return customer.getCustomerId();
